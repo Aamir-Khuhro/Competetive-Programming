@@ -1,0 +1,81 @@
+import java.io.*;
+import java.util.Scanner;
+import java.io.FileNotFoundException;
+
+public class UpdatedMerge {
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+
+        try{
+            File file = new File("Resources/array_testcases.txt");
+            Scanner in = new Scanner(file);
+
+            while(in.hasNextLine()){
+                String array1 = in.nextLine();
+                System.out.println("--- Array 01 ---\n" + array1);
+
+                String array2 = in.nextLine();
+                System.out.println("--- Array 02 ---\n" + array2);
+
+                String array3 = in.nextLine();
+                int[] arr1 = convertToArray(array1);
+                int[] arr2 = convertToArray(array2);
+
+                String mergedArray = mergeArrays(arr1, arr2);
+
+                System.out.println("--- Merged Array ---\n" + mergedArray);
+
+                System.out.println(array3.equals(mergedArray) ? "Test Case Passed..\n====================\n" : "Test Case Failed..\n====================\n");
+
+
+            }
+
+        }
+        catch(FileNotFoundException e){
+            System.out.println("File not found..");
+        }
+    }
+
+
+    public static String mergeArrays(int[] arr1, int[] arr2){
+        int[] arr3 = new int[arr1.length + arr2.length];
+        int i = 0, j = 0, k = 0;
+
+        while(i < arr3.length) {
+            if (arr1[j] >= arr2[k]) {
+                arr3[i++] = arr2[k++];
+                if (k == arr2.length) {
+                    while (i < arr3.length) {
+                        arr3[i++] = arr1[j++];
+                    }
+                    continue;
+                }
+            } else {
+                arr3[i++] = arr1[j++];
+                if (j == arr1.length) {
+                    while (i < arr3.length) {
+                        arr3[i++] = arr2[k++];
+                    }
+                    continue;
+                }
+            }
+        }
+
+        String result = "";
+        for(int num : arr3){
+            result += (num + " ");
+        }
+        return result.trim();
+    }
+
+
+    public static int[] convertToArray(String s){
+        String[] strNums = s.split(" ");
+        int[] array = new int[strNums.length];
+
+        for(int i = 0; i < array.length; i++){
+            array[i] = Integer.parseInt(strNums[i]);
+        }
+        return array;
+    }
+}
